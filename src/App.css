@@ -1,8 +1,80 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(0, 0%, 3.9%);
+  color: hsl(0, 0%, 98%);
+}
+
+/* Main layout containers */
+.overview-top-bar {
+  height: 10vh;
+  border-bottom: 1px solid hsl(0, 0%, 14.9%);
+}
+
+.weekly-muscle-panel {
+  height: 30vh;
+  border-bottom: 1px solid hsl(0, 0%, 14.9%);
+}
+
+.exercise-panel {
+  height: 60vh;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Exercise panel split */
+.exercise-selection-table {
+  width: 30%;
+  border-right: 1px solid hsl(0, 0%, 14.9%);
+  overflow-y: auto;
+}
+
+.exercise-day-table {
+  width: 70%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+/* Card styles */
+.card {
+  background-color: hsl(0, 0%, 3.9%);
+  border: 1px solid hsl(0, 0%, 14.9%);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.card-header {
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: hsl(0, 0%, 98%);
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: hsl(0, 0%, 63.9%);
+  margin-top: 0.25rem;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .logo {
@@ -31,10 +103,6 @@
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-.card {
-  padding: 2em;
 }
 
 .read-the-docs {

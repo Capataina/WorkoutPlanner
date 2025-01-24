@@ -1,3 +1,3 @@
 export default function WeeklyMusclePanel() {
-    return <div>WeeklyMusclePanel</div>
+    return <div className="weekly-muscle-panel">WeeklyMusclePanel</div>
 }

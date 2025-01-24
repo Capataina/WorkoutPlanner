@@ -1,3 +1,3 @@
 export default function ExerciseSelectionTable() {
-    return <div>ExerciseSelectionTable</div>
+    return <div className="exercise-selection-table">ExerciseSelectionTable</div>
 }

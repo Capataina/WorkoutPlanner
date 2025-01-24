@@ -1,3 +1,3 @@
 export default function OverviewTopBar() {
-    return <div>OverviewTopBar</div>
+    return <div className="overview-top-bar">OverviewTopBar</div>
 }
