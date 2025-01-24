@@ -1,6 +1,6 @@
 import { useState } from "react";
 import exercises from "@/store/Exercises";
-import ExerciseCard from "./ExerciseCard";
+import DraggableExerciseCard from "./DraggableExerciseCard";
 import { Badge } from "@/Components/ui/badge";
 
 // Get unique muscle groups from all exercises
@@ -58,8 +58,8 @@ export default function ExerciseSelectionTable() {
                             key={muscle}
                             className={`cursor-pointer ${
                                 selectedMuscles.includes(muscle)
-                                    ? "bg-primary"
-                                    : "bg-secondary"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-secondary text-zinc-300 hover:text-primary-foreground"
                             }`}
                             onClick={() => toggleMuscle(muscle)}
                         >
@@ -70,8 +70,9 @@ export default function ExerciseSelectionTable() {
             </div>
             <div className="p-4 space-y-4">
                 {filteredExercises.map((exercise) => (
-                    <ExerciseCard
+                    <DraggableExerciseCard
                         key={exercise.name}
+                        id={`selection-${exercise.name}`}
                         exercise={exercise}
                     />
                 ))}

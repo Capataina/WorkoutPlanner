@@ -134,3 +134,20 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent-foreground));
 }
+
+.exercise-card {
+  cursor: grab;
+  transition: transform 0.2s ease;
+}
+
+.exercise-card:active {
+  cursor: grabbing;
+}
+
+.exercise-card[data-dragging="true"] {
+  opacity: 0.5;
+}
+
+.exercise-card.drag-over {
+  transform: translateY(5px);
+}

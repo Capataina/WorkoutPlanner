@@ -1,3 +1,4 @@
+import { useDroppable } from "@dnd-kit/core";
 import {
   Card,
   CardContent,
@@ -5,28 +6,85 @@ import {
   CardHeader,
   CardTitle,
 } from "@/Components/ui/card"
-import exercises from "@/store/Exercises";
-import ExerciseCard from "./ExerciseCard";
 import { cn } from "@/lib/utils";
+import { Exercise } from "@/store/Exercises";
+import ExerciseCard from "./ExerciseCard";
 
 interface ExerciseDayCardProps {
   dayName: string;
-  children?: React.ReactNode;
+  exercises: Exercise[];
   className?: string;
+  onDeleteExercise?: (dayName: string, index: number) => void;
+  onSwapExercises?: (dayName: string, index1: number, index2: number) => void;
 }
 
-export default function ExerciseDayCard({ dayName, children, className }: ExerciseDayCardProps) {
+export default function ExerciseDayCard({ 
+  dayName, 
+  exercises = [], 
+  className, 
+  onDeleteExercise,
+  onSwapExercises 
+}: ExerciseDayCardProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `day-${dayName}`,
+  });
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    e.dataTransfer.setData('text/plain', JSON.stringify({
+      dayName,
+      index,
+      type: 'exercise-swap'
+    }));
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    const target = e.target as HTMLElement;
+    const card = target.closest('.exercise-card');
+    if (card) {
+      e.dataTransfer.dropEffect = 'move';
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+    
+    if (data.type === 'exercise-swap' && data.dayName === dayName) {
+      onSwapExercises?.(dayName, data.index, targetIndex);
+    }
+  };
+
   return (
-    <Card className={cn("bg-card border-border", className)}>
-      <CardHeader className="text-center border-b border-border pb-4">
-        <CardTitle className="text-lg text-card-foreground">{dayName}</CardTitle>
-        <CardDescription className="text-muted-foreground">Drop exercises here</CardDescription>
+    <Card 
+      ref={setNodeRef} 
+      className={cn(
+        "exercise-day-card",
+        isOver && "border-primary",
+        className
+      )}
+    >
+      <CardHeader>
+        <CardTitle>{dayName}</CardTitle>
+        <CardDescription>Drop exercises here</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-2 pt-4">
-        <ExerciseCard exercise={exercises["Bench Press"]} />
-        <ExerciseCard exercise={exercises["Barbell Row"]} />
-        {children}
+      <CardContent className="space-y-2">
+        {exercises.map((exercise, index) => (
+          <div
+            key={`${dayName}-${exercise.name}-${index}`}
+            className="exercise-card"
+            draggable
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, index)}
+          >
+            <ExerciseCard
+              exercise={exercise}
+              onDelete={() => onDeleteExercise?.(dayName, index)}
+            />
+          </div>
+        ))}
       </CardContent>
     </Card>
-  )
+  );
 }
