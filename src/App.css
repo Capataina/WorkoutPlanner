@@ -33,13 +33,13 @@
 
 /* Exercise panel split */
 .exercise-selection-table {
-  width: 30%;
+  width: 20%;
   border-right: 1px solid hsl(var(--border));
   overflow-y: auto;
 }
 
 .exercise-day-table {
-  width: 70%;
+  width: 80%;
   display: grid;
   grid-template-columns: repeat(7, 45%); /* Fixed width for each day card */
   gap: 1rem;
@@ -133,4 +133,21 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent-foreground));
+}
+
+.exercise-card {
+  cursor: grab;
+  transition: transform 0.2s ease;
+}
+
+.exercise-card:active {
+  cursor: grabbing;
+}
+
+.exercise-card[data-dragging="true"] {
+  opacity: 0.5;
+}
+
+.exercise-card.drag-over {
+  transform: translateY(5px);
 }
