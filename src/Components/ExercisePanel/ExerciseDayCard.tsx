@@ -1,5 +1,3 @@
-import { cn } from "@/lib/utils"
-
 import {
   Card,
   CardContent,
@@ -7,6 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/Components/ui/card"
+import exercises from "@/store/Exercises";
+import ExerciseCard from "./ExerciseCard";
+import { cn } from "@/lib/utils";
 
 interface ExerciseDayCardProps {
   dayName: string;
@@ -16,14 +17,16 @@ interface ExerciseDayCardProps {
 
 export default function ExerciseDayCard({ dayName, children, className }: ExerciseDayCardProps) {
   return (
-    <div className="card">
-      <div className="card-header">
-        <div className="card-title">{dayName}</div>
-        <div className="card-description">Drop exercises here</div>
-      </div>
-      <div className="card-content">
+    <Card className={cn("bg-card border-border", className)}>
+      <CardHeader className="text-center border-b border-border pb-4">
+        <CardTitle className="text-lg text-card-foreground">{dayName}</CardTitle>
+        <CardDescription className="text-muted-foreground">Drop exercises here</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2 pt-4">
+        <ExerciseCard exercise={exercises["Bench Press"]} />
+        <ExerciseCard exercise={exercises["Barbell Row"]} />
         {children}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

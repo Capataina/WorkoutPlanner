@@ -17,12 +17,12 @@
 /* Main layout containers */
 .overview-top-bar {
   height: 10vh;
-  border-bottom: 1px solid hsl(0, 0%, 14.9%);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .weekly-muscle-panel {
   height: 30vh;
-  border-bottom: 1px solid hsl(0, 0%, 14.9%);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .exercise-panel {
@@ -34,17 +34,18 @@
 /* Exercise panel split */
 .exercise-selection-table {
   width: 30%;
-  border-right: 1px solid hsl(0, 0%, 14.9%);
+  border-right: 1px solid hsl(var(--border));
   overflow-y: auto;
 }
 
 .exercise-day-table {
   width: 70%;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 45%); /* Fixed width for each day card */
   gap: 1rem;
   padding: 1rem;
-  overflow-y: auto;
+  max-height: 100%;
+  overflow-x: auto;
 }
 
 /* Card styles */
@@ -53,10 +54,15 @@
   border: 1px solid hsl(0, 0%, 14.9%);
   border-radius: 0.5rem;
   padding: 1rem;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .card-header {
   margin-bottom: 1rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid hsl(0, 0%, 14.9%);
 }
 
 .card-title {
@@ -107,4 +113,24 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent-foreground));
 }
