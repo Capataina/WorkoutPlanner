@@ -64,7 +64,7 @@ export default function ExerciseDayCard({
         className
       )}
     >
-      <CardHeader>
+      <CardHeader className="text-center border-b pb-4">
         <CardTitle>{dayName}</CardTitle>
         <CardDescription>Drop exercises here</CardDescription>
       </CardHeader>
