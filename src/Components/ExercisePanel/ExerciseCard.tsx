@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/Components/ui/card"
 import { Badge } from "@/Components/ui/badge"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { Exercise } from "@/store/Exercises"
 
@@ -18,19 +19,40 @@ export default function ExerciseCard({ exercise, className }: ExerciseCardProps)
         <p className="text-sm text-muted-foreground">{exercise.description}</p>
         <div className="flex flex-wrap gap-2">
           {exercise.primaryMuscles.map((muscle) => (
-            <Badge key={muscle} variant="default" className="bg-blue-500/90 hover:bg-blue-600">
-              {muscle}
-            </Badge>
+            <Tooltip key={muscle}>
+              <TooltipTrigger asChild>
+                <Badge className="bg-indigo-300/90 hover:bg-indigo-400/90 cursor-default">
+                  {muscle}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                Primary Muscle Group
+              </TooltipContent>
+            </Tooltip>
           ))}
           {exercise.secondaryMuscles.map((muscle) => (
-            <Badge key={muscle} variant="default" className="bg-green-500/70 hover:bg-green-600/70">
-              {muscle}
-            </Badge>
+            <Tooltip key={muscle}>
+              <TooltipTrigger asChild>
+                <Badge className="bg-teal-300/75 hover:bg-teal-400/75 cursor-default">
+                  {muscle}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                Secondary Muscle Group
+              </TooltipContent>
+            </Tooltip>
           ))}
           {exercise.tertiaryMuscles.map((muscle) => (
-            <Badge key={muscle} variant="default" className="bg-red-500/50 hover:bg-red-600/50">
-              {muscle}
-            </Badge>
+            <Tooltip key={muscle}>
+              <TooltipTrigger asChild>
+                <Badge className="bg-amber-300/50 hover:bg-amber-400/50 cursor-default">
+                  {muscle}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                Tertiary Muscle Group
+              </TooltipContent>
+            </Tooltip>
           ))}
         </div>
       </CardContent>
