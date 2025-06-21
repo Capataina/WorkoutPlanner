@@ -1,5 +1,4 @@
 import ExerciseDayCard from "./ExerciseDayCard"
-import { Exercise } from "@/store/Exercises"
 import { Button } from "@/Components/ui/button";
 import { Plus } from "lucide-react";
 import { DayExercise } from "@/App";

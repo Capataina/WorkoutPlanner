@@ -39,7 +39,7 @@ export default function ExerciseDayCard({
   const [newDayName, setNewDayName] = useState(dayName);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+  const handleDragStart = (_e: React.DragEvent<HTMLDivElement>, index: number) => {
     setDragIndex(index);
   };
 

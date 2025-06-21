@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle } from "@/Components/ui/card"
+import { Card, CardTitle } from "@/Components/ui/card"
 import { Badge } from "@/Components/ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
 import { cn } from "@/lib/utils"

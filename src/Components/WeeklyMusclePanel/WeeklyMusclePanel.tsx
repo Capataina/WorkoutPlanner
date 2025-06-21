@@ -1,4 +1,4 @@
-import { Exercise, Muscle, MuscleGroup, MuscleToGroupMap } from "@/store/Exercises";
+import { Muscle, MuscleGroup, MuscleToGroupMap } from "@/store/Exercises";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/Components/ui/card";
 import { DayExercise } from "@/App";
 
