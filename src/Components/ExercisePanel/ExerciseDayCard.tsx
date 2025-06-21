@@ -1,77 +1,106 @@
-import { useDroppable } from "@dnd-kit/core";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/Components/ui/card"
-import { cn } from "@/lib/utils";
-import { Exercise } from "@/store/Exercises";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/Components/ui/card"
 import ExerciseCard from "./ExerciseCard";
+import { useDroppable } from "@dnd-kit/core";
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import { DayExercise } from "@/App";
 
 interface ExerciseDayCardProps {
   dayName: string;
-  exercises: Exercise[];
+  exercises: DayExercise[];
   className?: string;
-  onDeleteExercise?: (dayName: string, index: number) => void;
-  onSwapExercises?: (dayName: string, index1: number, index2: number) => void;
+  onDeleteExercise: (dayName: string, exerciseId: string) => void;
+  onSwapExercises: (dayName: string, index1: number, index2: number) => void;
+  onDeleteDay: () => void;
+  onRenameDay: (newName: string) => void;
+  onSetCountChange: (dayName: string, exerciseId: string, sets: number) => void;
 }
 
-export default function ExerciseDayCard({ 
-  dayName, 
-  exercises = [], 
-  className, 
+export default function ExerciseDayCard({
+  dayName,
+  exercises = [],
+  className,
   onDeleteExercise,
-  onSwapExercises 
+  onSwapExercises,
+  onDeleteDay,
+  onRenameDay,
+  onSetCountChange,
 }: ExerciseDayCardProps) {
   const { setNodeRef, isOver } = useDroppable({
-    id: `day-${dayName}`,
+    id: dayName,
+    data: {
+      accepts: 'exercise'
+    }
   });
 
-  const handleDragStart = (e: React.DragEvent, index: number) => {
-    e.dataTransfer.setData('text/plain', JSON.stringify({
-      dayName,
-      index,
-      type: 'exercise-swap'
-    }));
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [newDayName, setNewDayName] = useState(dayName);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    setDragIndex(index);
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const target = e.target as HTMLElement;
-    const card = target.closest('.exercise-card');
-    if (card) {
-      e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, dropIndex: number) => {
+    e.preventDefault();
+    if (dragIndex !== null) {
+      onSwapExercises(dayName, dragIndex, dropIndex);
+      setDragIndex(null);
     }
   };
 
-  const handleDrop = (e: React.DragEvent, targetIndex: number) => {
-    e.preventDefault();
-    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-    
-    if (data.type === 'exercise-swap' && data.dayName === dayName) {
-      onSwapExercises?.(dayName, data.index, targetIndex);
+  const handleRename = () => {
+    if (newDayName.trim()) {
+      onRenameDay(newDayName.trim());
     }
+    setIsEditing(false);
   };
 
   return (
-    <Card 
-      ref={setNodeRef} 
+    <Card
+      ref={setNodeRef}
       className={cn(
         "exercise-day-card",
         isOver && "border-primary",
         className
       )}
     >
-      <CardHeader className="text-center border-b pb-4">
-        <CardTitle>{dayName}</CardTitle>
+      <CardHeader className="text-center border-b pb-4 relative">
+        {isEditing ? (
+          <input
+            type="text"
+            value={newDayName}
+            onChange={(e) => setNewDayName(e.target.value)}
+            onBlur={handleRename}
+            onKeyDown={(e) => e.key === 'Enter' && handleRename()}
+            autoFocus
+            className="bg-transparent text-center text-lg font-semibold w-full"
+          />
+        ) : (
+          <CardTitle onClick={() => setIsEditing(true)} className="cursor-pointer">
+            {dayName}
+          </CardTitle>
+        )}
         <CardDescription>Drop exercises here</CardDescription>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2"
+          onClick={onDeleteDay}
+        >
+          <X className="h-4 w-4" />
+        </Button>
       </CardHeader>
-      <CardContent className="space-y-2">
-        {exercises.map((exercise, index) => (
+      <CardContent className="space-y-2 p-4">
+        {exercises.map((dayExercise, index) => (
           <div
-            key={`${dayName}-${exercise.name}-${index}`}
+            key={dayExercise.id}
             className="exercise-card"
             draggable
             onDragStart={(e) => handleDragStart(e, index)}
@@ -79,8 +108,10 @@ export default function ExerciseDayCard({
             onDrop={(e) => handleDrop(e, index)}
           >
             <ExerciseCard
-              exercise={exercise}
-              onDelete={() => onDeleteExercise?.(dayName, index)}
+              exercise={dayExercise.exercise}
+              onDelete={() => onDeleteExercise(dayName, dayExercise.id)}
+              sets={dayExercise.sets}
+              onSetsChange={(sets) => onSetCountChange(dayName, dayExercise.id, sets)}
             />
           </div>
         ))}

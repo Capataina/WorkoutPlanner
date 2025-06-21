@@ -1,16 +1,25 @@
 import './App.css'
-import OverviewTopBar from './Components/OverviewTopBar/OverviewTopBar'
+import { useState } from 'react'
 import WeeklyMusclePanel from './Components/WeeklyMusclePanel/WeeklyMusclePanel'
 import ExercisePanel from './Components/ExercisePanel/ExercisePanel'
 import { TooltipProvider } from '@/Components/ui/tooltip'
+import { Exercise } from '@/store/Exercises'
+
+export interface DayExercise {
+  id: string;
+  exercise: Exercise;
+  sets: number;
+}
+type DayExercises = Record<string, DayExercise[]>;
 
 function App() {
+  const [dayExercises, setDayExercises] = useState<DayExercises>({});
+
   return (
     <TooltipProvider>
       <div className="dark">
-        <OverviewTopBar />
-        <ExercisePanel />
-        <WeeklyMusclePanel />
+        <ExercisePanel dayExercises={dayExercises} setDayExercises={setDayExercises} />
+        <WeeklyMusclePanel dayExercises={dayExercises} />
       </div>
     </TooltipProvider>
   )

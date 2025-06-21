@@ -15,18 +15,14 @@
 }
 
 /* Main layout containers */
-.overview-top-bar {
-  height: 10vh;
-  border-bottom: 1px solid hsl(var(--border));
-}
-
 .weekly-muscle-panel {
-  height: 30vh;
+  height: 35vh;
   border-bottom: 1px solid hsl(var(--border));
+  overflow-y: auto;
 }
 
 .exercise-panel {
-  height: 60vh;
+  height: 65vh;
   display: flex;
   flex-direction: row;
 }
@@ -41,7 +37,7 @@
 .exercise-day-table {
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(7, 45%); /* Fixed width for each day card */
+  grid-template-columns: repeat(7, 25%); /* Fixed width for each day card */
   gap: 1rem;
   padding: 1rem;
   max-height: 100%;

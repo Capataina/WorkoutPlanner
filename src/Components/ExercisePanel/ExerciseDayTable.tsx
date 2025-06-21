@@ -1,34 +1,50 @@
 import ExerciseDayCard from "./ExerciseDayCard"
 import { Exercise } from "@/store/Exercises"
+import { Button } from "@/Components/ui/button";
+import { Plus } from "lucide-react";
+import { DayExercise } from "@/App";
 
-const DAYS_OF_WEEK = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday"
-]
+type DayExercises = Record<string, DayExercise[]>;
 
 interface ExerciseDayTableProps {
-  exercises: Record<string, Exercise[]>;
-  onDeleteExercise?: (dayName: string, index: number) => void;
-  onSwapExercises?: (dayName: string, index1: number, index2: number) => void;
+  days: string[];
+  exercises: DayExercises;
+  onDeleteExercise: (dayName: string, exerciseId: string) => void;
+  onSwapExercises: (dayName: string, index1: number, index2: number) => void;
+  onAddDay: () => void;
+  onDeleteDay: (dayName: string) => void;
+  onRenameDay: (oldName: string, newName: string) => void;
+  onSetCountChange: (dayName: string, exerciseId: string, sets: number) => void;
 }
 
-export default function ExerciseDayTable({ exercises, onDeleteExercise, onSwapExercises }: ExerciseDayTableProps) {
+export default function ExerciseDayTable({
+  days,
+  exercises,
+  onDeleteExercise,
+  onSwapExercises,
+  onAddDay,
+  onDeleteDay,
+  onRenameDay,
+  onSetCountChange
+}: ExerciseDayTableProps) {
   return (
     <div className="exercise-day-table">
-      {DAYS_OF_WEEK.map((day) => (
-        <ExerciseDayCard 
-          key={day} 
-          dayName={day} 
-          exercises={exercises[day] || []} 
+      {days.map((day) => (
+        <ExerciseDayCard
+          key={day}
+          dayName={day}
+          exercises={exercises[day] || []}
           onDeleteExercise={onDeleteExercise}
           onSwapExercises={onSwapExercises}
+          onDeleteDay={() => onDeleteDay(day)}
+          onRenameDay={(newName) => onRenameDay(day, newName)}
+          onSetCountChange={onSetCountChange}
         />
       ))}
+      <Button onClick={onAddDay} variant="outline" className="h-full">
+        <Plus className="h-8 w-8" />
+        Add Day
+      </Button>
     </div>
   )
 }

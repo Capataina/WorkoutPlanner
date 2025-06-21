@@ -1,24 +1,22 @@
 import { useState } from "react";
-import exercises from "@/store/Exercises";
+import exercises, { MuscleGroup } from "@/store/Exercises";
 import DraggableExerciseCard from "./DraggableExerciseCard";
 import { Badge } from "@/Components/ui/badge";
 
 // Get unique muscle groups from all exercises
 const allMuscleGroups = Array.from(new Set(
-    Object.values(exercises).flatMap(exercise => [
-        ...exercise.primaryMuscles,
-        ...exercise.secondaryMuscles,
-        ...exercise.tertiaryMuscles
-    ])
+    Object.values(exercises).flatMap(exercise =>
+        exercise.targets.flatMap(target => target.groups)
+    )
 )).sort();
 
 export default function ExerciseSelectionTable() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
+    const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([]);
 
-    const toggleMuscle = (muscle: string) => {
-        setSelectedMuscles(prev => 
-            prev.includes(muscle) 
+    const toggleMuscle = (muscle: MuscleGroup) => {
+        setSelectedMuscles(prev =>
+            prev.includes(muscle)
                 ? prev.filter(m => m !== muscle)
                 : [...prev, muscle]
         );
@@ -27,12 +25,10 @@ export default function ExerciseSelectionTable() {
     const filteredExercises = Object.values(exercises).filter((exercise) => {
         // Filter by search query
         const matchesSearch = exercise.name.toLowerCase().includes(searchQuery.toLowerCase());
-        
-        // Filter by selected muscles
-        const matchesMuscles = selectedMuscles.length === 0 || selectedMuscles.some(muscle => 
-            exercise.primaryMuscles.includes(muscle) ||
-            exercise.secondaryMuscles.includes(muscle) ||
-            exercise.tertiaryMuscles.includes(muscle)
+
+        // Filter by selected muscle groups
+        const matchesMuscles = selectedMuscles.length === 0 || selectedMuscles.some(muscleGroup =>
+            exercise.targets.some(target => target.groups.includes(muscleGroup))
         );
 
         return matchesSearch && matchesMuscles;
@@ -56,11 +52,10 @@ export default function ExerciseSelectionTable() {
                     {allMuscleGroups.map((muscle) => (
                         <Badge
                             key={muscle}
-                            className={`cursor-pointer ${
-                                selectedMuscles.includes(muscle)
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-secondary text-zinc-300 hover:text-primary-foreground"
-                            }`}
+                            className={`cursor-pointer ${selectedMuscles.includes(muscle)
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-secondary text-zinc-300 hover:text-primary-foreground"
+                                }`}
                             onClick={() => toggleMuscle(muscle)}
                         >
                             {muscle}
@@ -72,7 +67,6 @@ export default function ExerciseSelectionTable() {
                 {filteredExercises.map((exercise) => (
                     <DraggableExerciseCard
                         key={exercise.name}
-                        id={`selection-${exercise.name}`}
                         exercise={exercise}
                     />
                 ))}

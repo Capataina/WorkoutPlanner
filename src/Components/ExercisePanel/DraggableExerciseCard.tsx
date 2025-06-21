@@ -5,12 +5,11 @@ import { cn } from "@/lib/utils";
 
 interface DraggableExerciseCardProps {
   exercise: Exercise;
-  id: string;
 }
 
-export default function DraggableExerciseCard({ exercise, id }: DraggableExerciseCardProps) {
+export default function DraggableExerciseCard({ exercise }: DraggableExerciseCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: id,
+    id: exercise.name,
     data: {
       exercise,
       type: 'exercise'
@@ -22,10 +21,10 @@ export default function DraggableExerciseCard({ exercise, id }: DraggableExercis
   } : undefined;
 
   return (
-    <div 
-      ref={setNodeRef} 
+    <div
+      ref={setNodeRef}
       style={style}
-      {...listeners} 
+      {...listeners}
       {...attributes}
       className={cn(
         "cursor-grab active:cursor-grabbing",
